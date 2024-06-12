@@ -18,7 +18,7 @@ def is_odd(a_number):
 
     So if a_number modulo two is zero, then it's even.
     """
-    return None
+    return a_number % 2 != 0
 
 
 def fix_it(moves=True, should_move=True):
@@ -34,10 +34,18 @@ def fix_it(moves=True, should_move=True):
     "No Problem"
 
     Most people write this function with 4 return statements.
+      If something moves and should move, return "No Problem".
+      If something moves but shouldn't move, return "Duct Tape".
+      If something doesn't move but should move, return "WD-40".
+      If something doesn't move and shouldn't move, return "No Problem".
     As an extra challenge, see if you can get that down to three.
     """
-    return None
-
+    if moves == should_move:
+        return "No Problem"
+    elif moves:
+        return "Duct Tape"  
+    else:
+        return "WD-40"
 
 def loops_preview():
     """Make 8 poops.
@@ -46,10 +54,10 @@ def loops_preview():
     return a list of 8 items, each one a string with exacly one 💩 in it.
     E.g.: ['💩', '💩', '💩', '💩', '💩', '💩', '💩', '💩']
     """
-    choc_list = []
-    for i in range(8):
-        choc_list.append("💩")
-    return choc_list
+    choc_list = [] # creates an empty list to hold the poop emojis.
+    for i in range(8): #runs a loop 8 times
+        choc_list.append("💩") #appends the 💩 emoji to the list in each iteration of the loop.
+    return choc_list #After the loop completes, the list containing 8 💩 emojis is returned.
 
 
 def loops_1a():
@@ -59,7 +67,10 @@ def loops_1a():
     return a list of 10 items, each one a string with exacly one star in it.
     E.g.: ['*', '*', '*', '*', '*', '*', '*', '*', '*', '*']
     """
-    return None
+    star_list = []
+    for j in range(10):
+        star_list.append("*")
+    return star_list
 
 
 def loops_1c(number_of_items=5, symbol="#"):
@@ -72,7 +83,10 @@ def loops_1c(number_of_items=5, symbol="#"):
     Remember that you're being passed arguments here. Don't hard code the number
     or the symbol, let it be whatever it wants to be.
     """
-    return None
+    numerosign_list = []
+    for j in range(1,6):
+        numerosign_list.append("#")
+    return numerosign_list
 
 
 def loops_2_preview():
@@ -114,7 +128,13 @@ def loops_2():
             ['*', '*', '*', '*', '*', '*', '*', '*', '*', '*'],
           ]
     """
-    return None
+    field = []
+    for i in range(10):
+        row = []
+        for j in range(10):
+            row.append("*")
+        field.append(row)
+    return field
 
 
 def loops_3():
@@ -138,8 +158,11 @@ def loops_3():
     TIP: notice that this needs to to return strings of numbers,
          so call str(number) to cast.
     """
-    return None
-
+    field = []
+    for i in range(10):
+        row = [str(i)] * 10
+        field.append(row)
+    return field
 
 def loops_4():
     """Make a block of numbers that rises left to right.
@@ -158,7 +181,13 @@ def loops_4():
       ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     ]
     """
-    return None
+    field = []
+    for i in range(10):
+        row = []
+        for j in range(10):
+            row.append(str(j))
+        field.append(row)
+    return field
 
 
 def loops_5():
@@ -181,14 +210,26 @@ def loops_5():
     TIP:
     If you've got num_bottles, e.g. num_bottles = 8
     You can construct strings either by concatinating them:
+                        concatenated_string = "There are " + str(num_bottles) + " green bottles"
+                        print(concatenated_string)
         "There are " + str(num_bottles) + " green bottles"
-    or by using format:
+    or by using format: 
+                        formatted_string = "There are {} green bottles".format(num_bottles)
+                        print(formatted_string)
         "There are {} green bottles".format(num_bottles)
-    or, my favourite, f-strings:
+    or, my favourite, f-strings: 
+                        f_string = f"There are {num_bottles} green bottles"
+                        print(f_string)
         f"There are {num_bottles} green bottles"
     you'll come to see the pros and cons of each over time.
     """
-    return None
+    field = []
+    for i in range(10):
+        row = []
+        for j in range(5):
+            row.append("(i{}, j{})".format(i, j))  # Creating coordinates for each row
+        field.append(row)
+    return field
 
 
 def loops_6():
@@ -211,8 +252,13 @@ def loops_6():
     You can use a variable.
     TIP: look out for the starting condition.
     """
-    return None
-
+    field = []
+    for i in range(10):
+        row = []  
+        for j in range(0, i + 1):
+            row.append(str(j)) 
+        field.append(row)
+    return field  
 
 def loops_7():
     """Make a pyramid.
@@ -235,7 +281,11 @@ def loops_7():
     This is a hard problem. Use lots of experimentation and draw
     lots of diagrams!
     """
-    return None
+    pyramid = []
+    for i in range(1,6):
+        row = [ ' ' *(5-i) + ' * ' * (2*i-1) + ' ' *(5-i)]
+        pyramid.append(row)
+    return pyramid
 
 
 if __name__ == "__main__":
@@ -248,8 +298,8 @@ if __name__ == "__main__":
         minitest(is_odd, [1], True)
         minitest(is_odd, [4], False)
         minitest(fix_it, [True, True], "No Problem")
-        minitest(fix_it, [True, False], "WD-40")
-        minitest(fix_it, [False, True], "Duct Tape")
+        minitest(fix_it, [True, False], "Duct Tape")
+        minitest(fix_it, [False, True], "WD-40")
         minitest(fix_it, [False, False], "No Problem")
         little_printer(loops_preview(), "loops_preview")
         little_printer(loops_1a(), "loops_1a")
