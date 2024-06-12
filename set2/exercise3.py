@@ -84,8 +84,8 @@ def loops_1c(number_of_items=5, symbol="#"):
     or the symbol, let it be whatever it wants to be.
     """
     numerosign_list = []
-    for j in range(1,6):
-        numerosign_list.append("#")
+    for _ in range(number_of_items):
+        numerosign_list.append(symbol)
     return numerosign_list
 
 
@@ -283,7 +283,7 @@ def loops_7():
     """
     pyramid = []
     for i in range(1,6):
-        row = [ ' ' *(5-i) + ' * ' * (2*i-1) + ' ' *(5-i)]
+        row = list(' ' *(5-i) + '*' * (2*i-1) + ' ' *(5-i))
         pyramid.append(row)
     return pyramid
 
