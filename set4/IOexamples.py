@@ -16,7 +16,7 @@ https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files
 
 import json
 
-
+#name is an argument
 def be_cool(name):
     """Just print, not actually doing any IO."""
     print(f"{name} is cool")
@@ -28,9 +28,9 @@ be_cool("Ben")
 def be_cool_for_ever(name, file_path):
     """Save a message about being cool for ever."""
     mode = "w"  # from the docs
-    history_book = open(file_path, mode)
-    history_book.write(f"{name} is cool")
-    history_book.close()
+    history_book = open(file_path, mode) #open the file
+    history_book.write(f"{name} is cool")#write sth into
+    history_book.close()#finish and close it
 
 
 # look up what '..' means

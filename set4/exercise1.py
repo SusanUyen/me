@@ -37,10 +37,17 @@ def get_some_details():
          dictionary, you'll need integer indeces for lists, and named keys for
          dictionaries.
     """
+    #Read json data file with open as file "lazyduck.json"
     json_data = open(LOCAL + "/lazyduck.json").read()
-
+    #Convert the json data to a dictionary
     data = json.loads(json_data)
-    return {"lastName": None, "password": None, "postcodePlusID": None}
+    #Extract the require information
+    lastname= data["results"][0]["name"]["last"]
+    password= data["results"][0]["login"]["password"]
+    postcode=int(data["results"][0]["location"]["postcode"])
+    id_value=int(data["results"][0]["login"]["id"])
+    postcodeandID= postcode + id_value
+    return {"lastName": lastname, "password": password, "postcodePlusID":postcodeandID }
 
 
 def wordy_pyramid():
@@ -78,6 +85,19 @@ def wordy_pyramid():
     TIP: to add an argument to a URL, use: ?argName=argVal e.g. &wordlength=
     """
     pyramid = []
+    for i in range(3,10,2):
+        url = f"    https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength={i}" #{i} is the string 
+        response = requests.get(url)
+        if response.status_code is 200:
+            word=response.text
+            pyramid.append(word)
+
+    for i in range(11,4,-2):
+        url = f"    https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength={i}" #{i} is the string 
+        response = requests.get(url)
+        if response.status_code is 200:
+            word=response.text
+            pyramid.append(word)
 
     return pyramid
 
