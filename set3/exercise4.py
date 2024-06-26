@@ -25,8 +25,20 @@ def binary_search(low, high, actual_number):
     guess = 0
 
     # Write your code in here
-
-    return {"guess": guess, "tries": tries}
+    while low <= high:
+        tries += 1
+        guess = math.floor((low + high) / 2)  # Calculate midpoint
+        print(f"Guessing {guess}")
+        
+        if guess == actual_number:
+            return {"guess": guess, "tries": tries}
+        elif guess < actual_number:
+            low = guess + 1  # Adjust lower bound
+        else:
+            high = guess - 1  # Adjust upper bound
+    
+    # If actual_number is not found within the range
+    return {"guess": None, "tries": tries}
 
 
 if __name__ == "__main__":

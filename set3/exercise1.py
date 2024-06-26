@@ -17,7 +17,11 @@ def loop_ranger(start, stop=None, step=1):
     Look up for how range() works in the python docs. You could  answer this
     with just the range function, but we'd like you to do it the long way.
     """
-    return None
+    my_list = []
+    for i in range(start,stop, step):
+        my_list.append(i)
+    return my_list
+    
 
 
 def two_step_ranger(start, stop):
@@ -28,7 +32,10 @@ def two_step_ranger(start, stop):
 
     You can either reuse loop_ranger, or the range function that in the standard library
     """
-    return None
+    my_list = []
+    for i in range(start,stop, 2):
+        my_list.append(i)
+    return my_list
 
 
 def stubborn_asker(low, high):
@@ -39,7 +46,16 @@ def stubborn_asker(low, high):
 
     Look up the docs for a function called "input"
     """
-    return None
+    my_list = []
+    while True:
+        try:
+            my_list = int(input(f"Please enter a number between low and high: "))
+            if low <= my_list <= high:
+                return my_list
+            else:
+                print(f"Number not in range [{low}, {high}]. Please try again.")
+        except ValueError:
+            print("Invalid input. Please enter a valid integer.")
 
 
 def not_number_rejector(message):
@@ -49,7 +65,14 @@ def not_number_rejector(message):
     (e.g. "cow", "six", "8!") then throw it out and ask for an actual number.
     When you do get a number, return it.
     """
-    return None
+    while True:
+        my_list = input(message)
+        try:
+            number = float(my_list)  # Using float to accept both integers and floating-point numbers
+            return number
+        except ValueError:
+            print("That's not a valid number. Please try again.")
+
 
 
 def super_asker(low, high):
@@ -58,7 +81,17 @@ def super_asker(low, high):
     Combine what you learnt from stubborn_asker and not_number_rejector
     to make a function that does it all!
     """
-    return None
+    while True:
+        my_list = input(f"Please enter a number between {low} and {high}: ")
+        try:
+            number = float(my_list)  # Using float to accept both integers and floating-point numbers
+            if low <= number <= high:
+                print(f"Thank you! You entered a valid number: {number}")
+                return number
+            else:
+                print(f"Number not in range [{low}, {high}]. Please try again.")
+        except ValueError:
+            print("That's not a valid number. Please try again.")
 
 
 if __name__ == "__main__":
