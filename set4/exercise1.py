@@ -37,18 +37,39 @@ def get_some_details():
          dictionary, you'll need integer indeces for lists, and named keys for
          dictionaries.
     """
-    #Read json data file with open as file "lazyduck.json"
-    json_data = open(LOCAL + "/lazyduck.json").read()
-    #Convert the json data to a dictionary
-    data = json.loads(json_data)
-    #Extract the require information
-    lastname= data["results"][0]["name"]["last"]
-    password= data["results"][0]["login"]["password"]
-    postcode=int(data["results"][0]["location"]["postcode"])
-    id_value=int(data["results"][0]["login"]["id"])
-    postcodeandID= postcode + id_value
-    return {"lastName": lastname, "password": password, "postcodePlusID":postcodeandID }
+    file_path = os.path.join(LOCAL, "lazyduck.json")
 
+    # Check if the file exists
+    if not os.path.exists(file_path):
+        return {"error": "File not found"}
+
+    # Read the JSON data from the file
+    with open(file_path, "r", encoding="utf-8") as file:
+        data = json.load(file)
+
+    # Extract the required information
+    last_name = data["results"][0]["name"]["last"]
+    password = data["results"][0]["login"]["password"]
+    postcode = int(data["results"][0]["location"]["postcode"])
+    id_value = data["results"][0]["id"]["value"]
+
+    # Handle cases where id_value is not a valid integer
+    try:
+        id_value = int(id_value)
+    except ValueError:
+        id_value = 0
+
+    # Calculate the sum of the postcode and the ID value
+    postcode_plus_id = postcode + id_value
+
+    # Create a new dictionary with the extracted information
+    result = {
+        "lastName": last_name,
+        "password": password,
+        "postcodePlusID": postcode_plus_id
+    }
+
+    return result
 
 def wordy_pyramid():
     """Make a pyramid out of real words.
@@ -85,19 +106,28 @@ def wordy_pyramid():
     TIP: to add an argument to a URL, use: ?argName=argVal e.g. &wordlength=
     """
     pyramid = []
-    for i in range(3,10,2):
-        url = f"    https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength={i}" #{i} is the string 
-        response = requests.get(url)
-        if response.status_code is 200:
-            word=response.text
-            pyramid.append(word)
 
-    for i in range(11,4,-2):
-        url = f"    https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength={i}" #{i} is the string 
+    # Building the pyramid upwards
+    for length in range(3, 21, 2):
+        url = f"https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength={length}"
         response = requests.get(url)
-        if response.status_code is 200:
-            word=response.text
+
+        if response.status_code == 200:
+            word = response.text.strip()  # Get the word and strip any whitespace
             pyramid.append(word)
+        else:
+            print(f"Failed to fetch word for length {length}")
+
+    # Building the pyramid downwards
+    for length in range(20, 2, -2):
+        url = f"https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength={length}"
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            word = response.text.strip()  # Get the word and strip any whitespace
+            pyramid.append(word)
+        else:
+            print(f"Failed to fetch word for length {length}")
 
     return pyramid
 
@@ -116,13 +146,25 @@ def pokedex(low=1, high=5):
          get very long. If you are accessing a thing often, assign it to a
          variable and then future access will be easier.
     """
-    id = 5
-    url = f"https://pokeapi.co/api/v2/pokemon/{id}"
-    r = requests.get(url)
-    if r.status_code is 200:
-        the_json = json.loads(r.text)
+    tallest_pokemon = {"name": None, "weight": None, "height": None}
+    max_height = -1
 
-    return {"name": None, "weight": None, "height": None}
+    for pokemon_id in range(low, high + 1):
+        url = f"https://pokeapi.co/api/v2/pokemon/{pokemon_id}"
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            pokemon_data = response.json()
+            height = pokemon_data["height"]
+            if height > max_height:
+                max_height = height
+                tallest_pokemon["name"] = pokemon_data["name"]
+                tallest_pokemon["height"] = height
+                tallest_pokemon["weight"] = pokemon_data["weight"]
+        else:
+            print(f"Failed to fetch data for Pokémon with ID {pokemon_id}")
+
+    return tallest_pokemon
 
 
 def diarist():
@@ -142,7 +184,20 @@ def diarist():
 
     NOTE: this function doesn't return anything. It has the _side effect_ of modifying the file system
     """
-    pass
+    file_path = "Set4/Trispokedovetiles(laser).gcode"
+    count = 0
+
+    # Read the G-code file and count occurrences of "M10 P1"
+    with open(file_path, "r", encoding="utf-8") as file:
+        content = file.read()
+        count = content.count("M10 P1")
+
+    # Write the count to lasers.pew
+    output_file_path = "Set4/lasers.pew"
+    with open(output_file_path, "w", encoding="utf-8") as output_file:
+        output_file.write(str(count))
+
+    print(f"Count of 'M10 P1' commands written to {output_file_path}: {count}")
 
 
 if __name__ == "__main__":
@@ -156,12 +211,12 @@ if __name__ == "__main__":
     diarist()
 
     in_root = os.path.isfile("lasers.pew")
-    in_set4 = os.path.isfile("set4/lasers.pew")
+    in_set4 = os.path.isfile("Set4/lasers.pew")
     if not in_set4 and not in_root:
         print("diarist did not create lasers.pew")
     elif not in_set4 and in_root:
         print(
-            "diarist did create lasers.pew, but in the me folder, it should be in the set4 folder"
+            "diarist did create lasers.pew, but in the me folder, it should be in the Set4 folder"
         )
     elif in_set4:
         print("lasers.pew is in the right place")
