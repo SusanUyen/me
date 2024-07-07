@@ -91,6 +91,8 @@ def abba(source="abba", guard=3):
     aobaobbbabbaoaaobbbaoaaobaobaobbba
                 and so on...
     """
+    if guard == -1:
+        return source
 
     def apply_rules(letter):
         """Control the substitution.
@@ -100,16 +102,20 @@ def abba(source="abba", guard=3):
         Hint: when guard == -1 return the letter.
         """
         if letter == "a":
-            return "a"
+            return "bba"
         elif letter == "b":
-            return "b"
+            return "aob"
         elif letter == "o":
-            return "o"
+            return "oa"
         else:
             return letter
 
-    # write the rest of the function here
-    pass
+    transformed = "".join(apply_rules(char) for char in source)
+    guard -= 1
+    if guard > 0:
+        return abba(transformed, guard)
+    else:
+        return transformed
 
 
 def koch(t, order, size):
@@ -154,8 +160,19 @@ def square_koch(t, order, size):
     """
     trace = ""
     # write the rest of the function here.
-    return str(order) + trace
-    pass
+    if order == 0:
+        t.forward(size)
+    else:
+        size /= 3.0
+        square_koch(t, order-1, size)
+        t.left(90)
+        square_koch(t, order-1, size)
+        t.right(90)
+        square_koch(t, order-1, size)
+        t.right(90)
+        square_koch(t, order-1, size)
+        t.left(90)
+        square_koch(t, order-1, size)
 
 
 def draw_square(steps=4):

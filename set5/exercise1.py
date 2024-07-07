@@ -24,39 +24,64 @@ Modify this function, don't write a whole new one.
 """
 
 
+def fetch_word(url):
+    """Fetches a word from the given URL and returns it."""
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.text.strip()  # Return the word after stripping whitespace
+    else:
+        print(f"Failed to fetch word from {url}. Status code: {response.status_code}")
+        return None
+
 def wordy_pyramid():
-    baseURL = (
-        "https://us-central1-waldenpondpress.cloudfunctions.net/"
-        "give_me_a_word?wordlength={length}"
-    )
+    """Make a pyramid out of real words."""
+    baseURL = "https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength={length}"
     pyramid_list = []
-    for i in range(3, 21, 2):
-        url = baseURL.format(length=i)
-        r = requests.get(url)
-        if r.status_code is 200:
-            message = r.text
-            pyramid_list.append(message)
-        else:
-            print("failed a request", r.status_code, i)
-    for i in range(20, 3, -2):
-        url = baseURL.format(length=i)
-        r = requests.get(url)
-        if r.status_code is 200:
-            message = r.text
-            pyramid_list.append(message)
-        else:
-            print("failed a request", r.status_code, i)
+
+    # Build pyramid upwards
+    for length in range(3, 21, 2):
+        url = baseURL.format(length=length)
+        word = fetch_word(url)
+        if word:
+            pyramid_list.append(word)
+
+    # Build pyramid downwards
+    for length in range(20, 2, -2):
+        url = baseURL.format(length=length)
+        word = fetch_word(url)
+        if word:
+            pyramid_list.append(word)
 
     return pyramid_list
 
-
 def get_a_word_of_length_n(length):
-    pass
+    """Fetches a word of specified length from an API endpoint and prints it."""
+    if not isinstance(length, int) or length < 3:
+        print("Invalid length. Length must be an integer greater than or equal to 3.")
+        return None
 
+    url = f"https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength={length}"
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            word = response.text.strip()  # Return the word after stripping whitespace
+            print(f"Requested length: {length}, Retrieved word: {word}")
+            return word
+        else:
+            print(f"Failed to fetch word of length {length}. Status code: {response.status_code}")
+            return None
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
 
 def list_of_words_with_lengths(list_of_lengths):
-    pass
-
+    """Returns a list of words fetched from the API for the specified list of lengths."""
+    words = []
+    for length in list_of_lengths:
+        word = get_a_word_of_length_n(length)
+        if word:
+            words.append(word)
+    return words
 
 if __name__ == "__main__":
     pyramid = wordy_pyramid()
