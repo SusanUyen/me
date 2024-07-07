@@ -16,54 +16,58 @@ from typing import Dict, List
 
 def give_me_five() -> int:
     """Returns the integer five."""
-    return None
+    return 5
 
 
 def password_please() -> str:
     """Returns a string, 8 or more characters long, contains at
     least one upper case letter and one lowercase letter.
     TIP: don't put in a real password!"""
-    return None
-
+    while True:
+        password = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(8))
+        if any(c.upper() for c in password) and any(c.islower() for c in password):
+            return password
 
 def list_please() -> list:
     """Returns a list, you can put anything in the list."""
-    return None
+    return [1, "hello", 3.14, None]
 
 
 def int_list_please() -> list:
     """Returns a list of integers, any integers are fine."""
-    return None
+    return [1,2,3,4,5]
 
 
 def string_list_please() -> list:
     """Returns a list of strings, any string are fine."""
-    return None
+    return ["apple", "banana", "cherry"]
 
 
 def dictionary_please() -> dict:
     """Returns a dictionary, anything you like."""
-    return None
+    return {"key1": "value1", "key2":2}
 
 
 def is_it_5(some_number) -> bool:
     """Returns True if the argument passed is 5, otherwise returns False."""
-    well_is_it = None
-    return well_is_it
+    if some_number == 5:
+        return True
+    else: 
+        return False
 
 
 def take_five(some_number) -> int:
     """Subtracts 5 from some_number."""
-    return None
+    return some_number - 5
 
 
 def greet(name="Towering Timmy") -> str:
     """Return a greeting.
     return a string of "Well hello, " and the name argument.
     E.g. if given as "Towering Timmy" it should
-         return "Well hello, Towering Timmy"
+        return "Well hello, Towering Timmy"
     """
-    return None
+    return f"Well hello, {name}"
 
 
 def one_counter(input_list=[1, 4, 1, 5, 1, 1]) -> int:
@@ -71,18 +75,14 @@ def one_counter(input_list=[1, 4, 1, 5, 1, 1]) -> int:
     Return an integer.
     TIP: the test will use a different input_list, so don't just return 2
     """
-    count = None
-
-    return count
+    return input_list.count(1)
 
 
 def n_counter(search_for_this, input_list=[1, 4, 1, 5, 1, 1]) -> int:
     """Count the number of times search_for_this shows up in the input_list.
     Return an integer.
     """
-    count = None
-
-    return count
+    return input_list.count(search_for_this)
 
 
 def fizz_buzz() -> List:
@@ -90,7 +90,7 @@ def fizz_buzz() -> List:
 
     This is the most famous basic programming test of all time!
 
-       "Write a program that prints the numbers from 1 to 100. But for
+        "Write a program that prints the numbers from 1 to 100. But for
         multiples of three print "Fizz" instead of the number and for
         the multiples of five print "Buzz". For numbers which are
         multiples of both three and five print "FizzBuzz"."
@@ -100,12 +100,20 @@ def fizz_buzz() -> List:
     Return a list that has an integer if the number isn't special,
     and a string if it is. E.g.
         [1, 2, 'Fizz', 4, 'Buzz', 'Fizz', 7, 8,
-         'Fizz', 'Buzz',  11, 'Fizz', 13, 14,
-         'FizzBuzz', 16, 17, ...]
+        'Fizz', 'Buzz',  11, 'Fizz', 13, 14,
+        'FizzBuzz', 16, 17, ...]
     """
     fizz_buzz_list = []
     # your code here
-
+    for i in range (1,101):
+        if i % 3 == 0 and i %5 ==0:
+            fizz_buzz_list.append("FizzBuzz")
+        elif i % 3 ==0:
+            fizz_buzz_list.append("Fizz")
+        elif i % 5 ==0:
+            fizz_buzz_list.append("Buzz")
+        else:
+            fizz_buzz_list.append(i)
     return fizz_buzz_list
 
 
@@ -116,12 +124,12 @@ def set_it_on_fire(input_string="very naughty boy") -> str:
     e.g. "very naughty boy" should return the string
     "🔥V🔥E🔥R🔥Y🔥 🔥N🔥A🔥U🔥G🔥H🔥T🔥Y🔥 🔥B🔥O🔥Y🔥"
     TIP: strings are pretty much lists of chars.
-         If you list("string") you get ['s', 't', 'r', 'i', 'n', 'g']
+        If you list("string") you get ['s', 't', 'r', 'i', 'n', 'g']
     TIP: consider using the 'join' method in Python.
     TIP: make sure that you have a 🔥 on both ends of the string.
     """
 
-    return None
+    return '🔥' + '🔥'.join(input_string.upper()) + '🔥'
 
 
 def pet_filter(letter="a") -> List:
@@ -138,7 +146,7 @@ def pet_filter(letter="a") -> List:
         "fancy rat and lab rat", "mink", "red fox", "hedgehog", "guppy"
     ]
     # fmt: on
-    filtered = []
+    filtered = [pet for pet in pets if letter in pet]
 
     return filtered
 
@@ -154,9 +162,14 @@ def best_letter_for_pets() -> str:
     import string
 
     the_alphabet = string.ascii_lowercase
-    most_popular_letter = ""
-
-    return most_popular_letter
+    max_count = 0
+    best_letter = ''
+    for letter in the_alphabet:
+        count = len(pet_filter(letter))
+        if count > max_count:
+            max_count = count
+            best_letter = letter
+    return best_letter
 
 
 def make_filler_text_dictionary() -> Dict:
@@ -186,7 +199,13 @@ def make_filler_text_dictionary() -> Dict:
 
     url = "https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength="
     wd = {}
-
+    for length in range (3,8):
+        words = []
+        for _ in range(4):
+            r = requests.get(url + str(length))
+            if r.status_code == 200:
+                words.append(r.text)
+        wd[length] = words
     return wd
 
 
@@ -204,7 +223,10 @@ def random_filler_text(number_of_words=200) -> str:
     my_dict = make_filler_text_dictionary()
 
     words = []
-
+    for _ in range(number_of_words):
+        word_length = random.randint(3, 7)
+        word = random.choice(my_dict[word_length])
+        words.append(word)
     return " ".join(words)
 
 
@@ -224,8 +246,21 @@ def fast_filler(number_of_words=200) -> str:
     """
 
     fname = "dict_cache.json"
+    if os.path.exists(fname):
+        with open(fname, 'r') as f:
+            my_dict = json.load(f)
+            my_dict = {int(k): v for k, v in my_dict.items()}
+    else:
+        my_dict = make_filler_text_dictionary()
+        with open(fname, 'w') as f:
+            json.dump(my_dict, f)
 
-    return None
+    words = []
+    for _ in range(number_of_words):
+        word_length = random.randint(3,7)
+        word = random.choice(my_dict[word_length])
+        words.append(word)
+    return " ".join(words)
 
 
 if __name__ == "__main__":
