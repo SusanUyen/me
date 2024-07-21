@@ -16,11 +16,12 @@ from typing import Dict, List
 
 def give_me_five() -> int:
     """Returns the integer five."""
-    return 5
+    answer = 5
+    return answer
 
 
 def password_please() -> str:
-    """Returns a string, 8 or more characters long, contains at
+    """Returns a string, 8 or more characters long [for in range (8)], contains at
     least one upper case letter and one lowercase letter.
     TIP: don't put in a real password!"""
     while True:
