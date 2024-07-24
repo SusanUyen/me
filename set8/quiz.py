@@ -16,8 +16,7 @@ from typing import Dict, List
 
 def give_me_five() -> int:
     """Returns the integer five."""
-    answer = 5
-    return answer
+    return 5
 
 
 def password_please() -> str:
@@ -31,12 +30,20 @@ def password_please() -> str:
 
 def list_please() -> list:
     """Returns a list, you can put anything in the list."""
-    return [1, "hello", 3.14, None]
-
+    list1 = [42, "hello", 3.14, True, [1, 2, 3], {"key": "value"}, (7, 8, 9)]
+#List includes different data types: an integer, a string, a float, a boolean, a list, a dictionary, and a tuple
+    return list1
 
 def int_list_please() -> list:
     """Returns a list of integers, any integers are fine."""
-    return [1,2,3,4,5]
+    list2 = [
+        1, 2, 3,  # Single-digit integers
+        10, 20, 30,  # Two-digit integers
+        100, 200, 300,  # Three-digit integers
+        -1, -2, -3,  # Negative single-digit integers
+        *range(1000, 1005)  # Range of integers from 1000 to 1004
+    ]
+    return list2
 
 
 def string_list_please() -> list:
@@ -46,7 +53,18 @@ def string_list_please() -> list:
 
 def dictionary_please() -> dict:
     """Returns a dictionary, anything you like."""
-    return {"key1": "value1", "key2":2}
+    return {
+        "integer": 42,  # Integer value
+        "float": 3.14,  # Float value
+        "string": "hello",  # String value
+        "boolean": True,  # Boolean value
+        "list": [1, 2, 3],  # List value
+        "tuple": (4, 5),  # Tuple value
+        "dictionary": {"nested_key": "nested_value"},  # Nested dictionary
+        "set": {6, 7, 8},  # Set value
+        "none": None,  # NoneType value
+        "function": lambda x: x * 2  # Function value (lambda)
+    }
 
 
 def is_it_5(some_number) -> bool:
@@ -59,7 +77,8 @@ def is_it_5(some_number) -> bool:
 
 def take_five(some_number) -> int:
     """Subtracts 5 from some_number."""
-    return some_number - 5
+    a_number = some_number -5
+    return a_number
 
 
 def greet(name="Towering Timmy") -> str:
@@ -76,14 +95,24 @@ def one_counter(input_list=[1, 4, 1, 5, 1, 1]) -> int:
     Return an integer.
     TIP: the test will use a different input_list, so don't just return 2
     """
-    return input_list.count(1)
+    
+    count = 0
+    for num in input_list:
+        if num == 1:
+            count += 1
+    return count
 
 
 def n_counter(search_for_this, input_list=[1, 4, 1, 5, 1, 1]) -> int:
     """Count the number of times search_for_this shows up in the input_list.
     Return an integer.
     """
-    return input_list.count(search_for_this)
+    #return input_list.count(search_for_this)
+    count = 0
+    for item in input_list:
+        if item == search_for_this:
+            count += 1
+    return count
 
 
 def fizz_buzz() -> List:
@@ -129,9 +158,15 @@ def set_it_on_fire(input_string="very naughty boy") -> str:
     TIP: consider using the 'join' method in Python.
     TIP: make sure that you have a 🔥 on both ends of the string.
     """
+    fire_emoji = "🔥"
+    input_string = input_string.upper()
+    interleaved_string = fire_emoji + fire_emoji.join(input_string) + fire_emoji
+    return interleaved_string
 
-    return '🔥' + '🔥'.join(input_string.upper()) + '🔥'
-
+    # Test the function with the example provided in the docstring
+    input_str = "very naughty boy"
+    result = set_it_on_fire(input_str)
+    print(result)
 
 def pet_filter(letter="a") -> List:
     """Return a list of pets whose name contains the character 'letter'"""
@@ -198,16 +233,17 @@ def make_filler_text_dictionary() -> Dict:
     TIP: you'll need the requests library
     """
 
-    url = "https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength="
-    wd = {}
-    for length in range (3,8):
+    filler_text_dict = {}
+
+    for i in range(3, 8):
+        url = f"https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength={i}"
         words = []
         for _ in range(4):
-            r = requests.get(url + str(length))
-            if r.status_code == 200:
-                words.append(r.text)
-        wd[length] = words
-    return wd
+            r = requests.get(url)
+            words.append(r.text)
+        filler_text_dict[i] = words
+
+    return filler_text_dict
 
 
 def random_filler_text(number_of_words=200) -> str:
