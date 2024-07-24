@@ -163,7 +163,7 @@ def pet_filter(letter="a") -> List:
         "fancy rat and lab rat", "mink", "red fox", "hedgehog", "guppy"
     ]
     # fmt: on
-    filtered = []
+    filtered = [pet for pet in pets if letter in pet]
 
     return filtered
 
@@ -179,8 +179,13 @@ def best_letter_for_pets() -> str:
     import string
 
     the_alphabet = string.ascii_lowercase
-    most_popular_letter = ""
-
+    max_count = 0
+    most_popular_letter = ''
+    for letter in the_alphabet:
+        count = len(pet_filter(letter))
+        if count > max_count:
+            max_count = count
+            most_popular_letter = letter
     return most_popular_letter
 
 
@@ -209,9 +214,15 @@ def make_filler_text_dictionary() -> Dict:
     TIP: you'll need the requests library
     """
 
-    url = "https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength="
+    
     wd = {}
-
+    for i in range(3,8):
+        url = f"https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength={i}"
+        word=[]
+        for _ in range(4):
+            r = requests.get(url)
+            word.append(r.text)
+        wd[i] = word
     return wd
 
 
@@ -229,7 +240,10 @@ def random_filler_text(number_of_words=200) -> str:
     my_dict = make_filler_text_dictionary()
 
     words = []
-
+    for i in range(number_of_words):
+        word_length = random.randint(3,7)
+        word = random.choice(my_dict[word_length])
+        words.append(word)
     return " ".join(words)
 
 
@@ -249,8 +263,21 @@ def fast_filler(number_of_words=200) -> str:
     """
 
     fname = "dict_cache.json"
+    if os.path.exists(fname):
+        with open(fname, 'r') as f:
+            my_dict = json.load(f)
+            my_dict = {int(a): b for a, b in my_dict.items()}
+    else:
+        my_dict = make_filler_text_dictionary()
+        with open(fname, 'w') as f:
+            json.dump(my_dict, f)
 
-    return None
+    words = []
+    for _ in range(number_of_words):
+        word_length = random.randint(3,7)
+        word = random.choice(my_dict[word_length])
+        words.append(word)
+    return " ".join(words)
 
 
 if __name__ == "__main__":
