@@ -147,6 +147,19 @@ def set_it_on_fire(input_string="very naughty boy") -> str:
     interleave_string = fire_emoji + fire_emoji.join(input_string) + fire_emoji
     return interleave_string
 
+def the_chain_gang_5(the_value) -> bool:
+    """Take the_value, subtract 5 from it, and return True if the value we end up with it 5.
+
+    You don't get anything for free this far into the quiz, you can't
+    use the == operator or the - operator, and you must use two of the
+    functions you've already written.
+
+    TIP: you've already written a function that returns True if the value is 5
+    TIP: you've already written a function that subtracts 5
+    
+    """
+    new_value = take_five(the_value)
+    return is_it_5(new_value)
 
 
 def pet_filter(letter="a") -> List:
@@ -213,7 +226,6 @@ def make_filler_text_dictionary() -> Dict:
     (i.e. 3, 4, 5, 6, 7 and 4 words for each)
     TIP: you'll need the requests library
     """
-
     
     wd = {}
     for i in range(3,8):
@@ -232,7 +244,7 @@ def random_filler_text(number_of_words=200) -> str:
     paragraph of text using randomly picked words. Each word should be a random
     length, and a random one of the words.
     Make the paragraph have number_of_words words in it.
-    Return it as a string
+    Return it as a string hghghg
     TIP: you'll need the random library,
         e.g. random.randint(low, high)
     """
@@ -274,7 +286,7 @@ def fast_filler(number_of_words=200) -> str:
 
     words = []
     for _ in range(number_of_words):
-        word_length = random.randint(3,7)
+        word_length = random.randint(3, 7)
         word = random.choice(my_dict[word_length])
         words.append(word)
     return " ".join(words)
@@ -301,6 +313,8 @@ if __name__ == "__main__":
     print("n_counter:", n_counter(7))
     print("fizz_buzz:", fizz_buzz())
     print("put_behind_bars:", set_it_on_fire())
+    print("chaing gang 5", the_chain_gang_5(5))
+    print("chaing gang 5", the_chain_gang_5(10))
     print("pet_filter:", pet_filter())
     print("best_letter_for_pets:", best_letter_for_pets())
     print("make_filler_text_dictionary:", make_filler_text_dictionary())
@@ -311,5 +325,4 @@ if __name__ == "__main__":
     print(
         "These are mini tests, they show you some output.",
         "\nDon't forget to run the real tests.",
-        "\nThey test your code against the non-default arguments",
-    )
+        "\nThey test your code against the non-default arguments",)
